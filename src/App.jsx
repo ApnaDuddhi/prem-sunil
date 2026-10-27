@@ -9,18 +9,29 @@ import {
 
 const BASE = import.meta.env.BASE_URL
 const photo = (name) => `${BASE}photos/${name}.jpeg`
+// Small, optimized thumbnail used for gallery previews (public/photos/thumbs).
+const thumb = (name) => `${BASE}photos/thumbs/${name}.jpeg`
 
-// Preload every gallery image (plus the hero + couple portraits) up front
-// and report progress so a full-page loader can cover the site until the
-// images are ready — then the page reveals with everything cached.
+// Only the three images shown above the fold are preloaded so the page can
+// reveal quickly: couple-2 (Hero), sunil-1 and prema-1 (Story). Gallery
+// previews use lightweight thumbnails; the full-size photo for a gallery
+// item is fetched only when it's opened in the lightbox.
+const ABOVE_FOLD = ['couple-2', 'sunil-1', 'prema-1']
+
+// Remembers which full-size photos have already loaded in this session. Kept
+// alive by the live Image objects below so the browser holds them in memory,
+// letting a re-opened photo appear instantly with no spinner or re-download.
+const fullCache = new Map()
+function cacheFull(src) {
+  if (fullCache.has(src)) return
+  const img = new Image()
+  img.src = photo(src)
+  fullCache.set(src, img)
+}
+const isFullCached = (src) => fullCache.has(src)
+
 function usePreloadImages() {
-  const names = [
-    'couple-2',
-    'sunil-1',
-    'prema-1',
-    ...gallery.map((g) => g.src),
-  ]
-  const unique = [...new Set(names)]
+  const unique = [...new Set(ABOVE_FOLD)]
   const total = unique.length
 
   const [loaded, setLoaded] = useState(0)
@@ -195,7 +206,27 @@ function Events() {
 
 function Lightbox({ index, onClose, onNavigate }) {
   const touchStart = useRef(null)
+  const fullImg = useRef(null)
   const item = gallery[index]
+
+  // Track whether the full-size photo for the current item has loaded. If it
+  // was cached earlier this session it's shown instantly (no spinner);
+  // otherwise the blurred thumbnail + spinner cover the wait.
+  const [fullLoaded, setFullLoaded] = useState(() => isFullCached(item.src))
+  useEffect(() => {
+    const cached = isFullCached(item.src)
+    setFullLoaded(cached)
+    // also catch a browser-cached image that resolves before onLoad fires
+    if (!cached && fullImg.current && fullImg.current.complete && fullImg.current.naturalWidth > 0) {
+      cacheFull(item.src)
+      setFullLoaded(true)
+    }
+    // warm up the neighbours so swiping to them is instant too
+    const prev = gallery[(index - 1 + gallery.length) % gallery.length]
+    const next = gallery[(index + 1) % gallery.length]
+    cacheFull(prev.src)
+    cacheFull(next.src)
+  }, [index, item.src])
 
   const goPrev = useCallback(
     () => onNavigate((index - 1 + gallery.length) % gallery.length),
@@ -260,7 +291,28 @@ function Lightbox({ index, onClose, onNavigate }) {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <img src={photo(item.src)} alt={item.alt} className="lightbox-img" />
+        <div className="lightbox-media">
+          {/* cached thumbnail shown instantly as a blurred placeholder */}
+          <img
+            src={thumb(item.src)}
+            alt=""
+            aria-hidden="true"
+            className="lightbox-thumb"
+          />
+          {/* full-resolution image, fetched only now that it's opened */}
+          <img
+            ref={fullImg}
+            key={item.src}
+            src={photo(item.src)}
+            alt={item.alt}
+            className={`lightbox-img ${fullLoaded ? 'is-loaded' : ''}`}
+            onLoad={() => {
+              cacheFull(item.src)
+              setFullLoaded(true)
+            }}
+          />
+          {!fullLoaded && <span className="lightbox-spinner" aria-hidden="true" />}
+        </div>
         <figcaption className="lightbox-counter">
           {index + 1} / {gallery.length}
         </figcaption>
@@ -299,7 +351,7 @@ function Gallery() {
             onClick={() => setOpenIndex(i)}
             aria-label={`Open photo: ${g.alt}`}
           >
-            <img src={photo(g.src)} alt={g.alt} loading="lazy" />
+            <img src={thumb(g.src)} alt={g.alt} loading="lazy" />
             {i === previewCount - 1 && remaining > 0 && (
               <span className="gallery-more" aria-hidden="true">
                 +{remaining}

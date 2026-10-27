@@ -572,6 +572,18 @@ img {
   touch-action: pan-y;
 }
 
+/* media wrapper layers the blurred thumb, the full image, and a spinner */
+.lightbox-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 80svh;
+  max-height: 80vh;
+}
+
+.lightbox-thumb,
 .lightbox-img {
   max-width: 100%;
   max-height: 80svh;
@@ -579,7 +591,36 @@ img {
   border-radius: 10px;
   object-fit: contain;
   box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.8);
-  animation: fade-in 0.3s ease both;
+}
+
+/* blurred low-res placeholder sits underneath until the full image fades in */
+.lightbox-thumb {
+  filter: blur(14px);
+  transform: scale(1.02);
+}
+
+.lightbox-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.lightbox-img.is-loaded {
+  opacity: 1;
+}
+
+/* spinner shown while the full-size image is downloading */
+.lightbox-spinner {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  animation: spin 0.9s linear infinite;
 }
 
 .lightbox-counter {
