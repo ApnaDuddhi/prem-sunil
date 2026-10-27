@@ -57,7 +57,7 @@ function Countdown() {
 function Hero() {
   return (
     <header className="hero" id="home">
-      <div className="hero-photo" style={{ backgroundImage: `url(${photo('couple-1')})` }} />
+      <div className="hero-photo" style={{ backgroundImage: `url(${photo('couple-2')})` }} />
       <div className="hero-overlay" />
       <div className="hero-content">
         <p className="hero-kicker">Together with their families</p>

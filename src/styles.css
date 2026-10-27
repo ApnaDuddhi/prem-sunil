@@ -74,7 +74,9 @@ img {
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center 25%;
+  /* couple-2 is a tall portrait; frame the faces in the upper third
+     so they sit above the overlay text, with minimal cropping. */
+  background-position: center 30%;
   transform: scale(1.05);
   animation: slow-zoom 20s ease-in-out infinite alternate;
 }
@@ -518,6 +520,11 @@ img {
     margin-bottom: 2.5rem;
   }
 
+  .hero-photo {
+    /* On wide screens the portrait is cropped top/bottom; keep faces
+       comfortably in view. */
+    background-position: center 22%;
+  }
   .hero-content {
     padding: 2rem;
   }
