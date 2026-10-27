@@ -1,3 +1,12 @@
+/* =====================================================================
+   Sunil & Prema — Wedding site styles
+   Mobile-first: base rules target small phones (~320px+),
+   then min-width breakpoints progressively enhance:
+     480px  → large phones
+     768px  → tablets
+     1024px → desktops
+   ===================================================================== */
+
 :root {
   --gold: #c9a24b;
   --gold-soft: #e4cd8f;
@@ -7,7 +16,7 @@
   --ink: #3a2e26;
   --ink-soft: #6b5c50;
   --maroon: #7a2e3a;
-  --shadow: 0 18px 50px -20px rgba(80, 50, 30, 0.45);
+  --shadow: 0 14px 40px -20px rgba(80, 50, 30, 0.45);
   --serif: 'Cormorant Garamond', Georgia, serif;
   --script: 'Great Vibes', cursive;
   --sans: 'Poppins', system-ui, sans-serif;
@@ -21,6 +30,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent iOS text auto-inflation on rotate */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -29,6 +41,7 @@ body {
   background: var(--cream);
   line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 img {
@@ -40,10 +53,15 @@ img {
   width: 100%;
 }
 
-/* ---------- Hero ---------- */
+/* =====================================================================
+   Hero — mobile first
+   ===================================================================== */
 .hero {
   position: relative;
   min-height: 100vh;
+  /* svh = small viewport height: avoids content hidden behind mobile
+     browser chrome. Fallback above for browsers without svh. */
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +74,7 @@ img {
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center 30%;
+  background-position: center 25%;
   transform: scale(1.05);
   animation: slow-zoom 20s ease-in-out infinite alternate;
 }
@@ -81,23 +99,24 @@ img {
 .hero-content {
   position: relative;
   z-index: 2;
-  padding: 2rem;
+  padding: 1.5rem 1.25rem;
+  width: 100%;
   animation: fade-up 1.4s ease both;
 }
 
 .hero-kicker {
   font-family: var(--serif);
-  letter-spacing: 0.3em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   opacity: 0.9;
 }
 
 .hero-names {
   font-family: var(--script);
   font-weight: 400;
-  font-size: clamp(3.5rem, 14vw, 9rem);
-  line-height: 1;
+  font-size: 3.4rem;
+  line-height: 1.05;
   margin: 0.4rem 0;
   text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   display: flex;
@@ -105,56 +124,54 @@ img {
 }
 
 .hero-names .amp {
-  font-size: clamp(2rem, 6vw, 4rem);
+  font-size: 1.9rem;
   color: var(--gold-soft);
-  margin: -0.4rem 0;
+  margin: -0.2rem 0;
 }
 
 .hero-sub {
   font-family: var(--serif);
-  font-size: clamp(1rem, 3vw, 1.4rem);
+  font-size: 1rem;
   font-style: italic;
   opacity: 0.95;
 }
 
 .hero-date {
   font-family: var(--serif);
-  letter-spacing: 0.35em;
-  font-size: clamp(1.3rem, 5vw, 2.2rem);
-  margin-top: 1.2rem;
+  letter-spacing: 0.3em;
+  font-size: 1.35rem;
+  margin-top: 1rem;
   color: var(--gold-soft);
 }
 
 .hero-place {
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   opacity: 0.85;
   margin-top: 0.3rem;
 }
 
 .hero-cta {
   display: inline-block;
-  margin-top: 2rem;
-  padding: 0.7rem 1.8rem;
+  margin-top: 1.75rem;
+  padding: 0.85rem 1.8rem;
   border: 1px solid var(--gold-soft);
   border-radius: 40px;
   color: #fff;
   text-decoration: none;
   font-size: 0.85rem;
   letter-spacing: 0.08em;
-  transition: all 0.3s ease;
+  min-height: 44px; /* comfortable tap target */
+  transition: background 0.3s ease, color 0.3s ease;
   backdrop-filter: blur(2px);
 }
 
-.hero-cta:hover {
-  background: var(--gold-soft);
-  color: var(--ink);
-}
-
-/* ---------- Sections ---------- */
+/* =====================================================================
+   Sections
+   ===================================================================== */
 .section {
-  padding: clamp(3.5rem, 8vw, 6rem) 1.5rem;
+  padding: 3.25rem 1.25rem;
   max-width: 1100px;
   margin: 0 auto;
   text-align: center;
@@ -162,31 +179,35 @@ img {
 
 .section-title {
   font-family: var(--script);
-  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  font-size: 2.3rem;
   color: var(--maroon);
   font-weight: 400;
   margin-bottom: 0.3rem;
+  line-height: 1.1;
 }
 
 .section-sub {
   font-family: var(--serif);
   font-style: italic;
   color: var(--ink-soft);
-  font-size: 1.15rem;
-  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
 }
 
-/* ---------- Countdown ---------- */
+/* =====================================================================
+   Countdown — 2 columns on phones, row on larger screens
+   ===================================================================== */
 .countdown-section {
   background: radial-gradient(circle at top, var(--cream-deep), var(--cream));
   max-width: none;
 }
 
 .countdown {
-  display: flex;
-  justify-content: center;
-  gap: clamp(0.6rem, 3vw, 1.8rem);
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 .count-box {
@@ -194,8 +215,7 @@ img {
   border: 1px solid var(--gold-soft);
   border-radius: 16px;
   box-shadow: var(--shadow);
-  padding: clamp(1rem, 4vw, 1.8rem) clamp(1rem, 4vw, 2rem);
-  min-width: clamp(70px, 20vw, 120px);
+  padding: 1.1rem 0.75rem;
   position: relative;
 }
 
@@ -203,50 +223,52 @@ img {
   display: block;
   font-family: var(--serif);
   font-weight: 600;
-  font-size: clamp(2rem, 9vw, 3.6rem);
+  font-size: 2.4rem;
   color: var(--maroon);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .count-label {
   display: block;
   margin-top: 0.4rem;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-size: 0.65rem;
   color: var(--ink-soft);
 }
 
 .countdown-done {
   font-family: var(--script);
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   color: var(--maroon);
 }
 
-/* ---------- Couple ---------- */
+/* =====================================================================
+   Couple — stacked on phones
+   ===================================================================== */
 .couple-cards {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
 .person {
   background: #fff;
   border-radius: 20px;
-  padding: 1.8rem 1.5rem 2rem;
+  padding: 1.6rem 1.25rem 1.8rem;
   box-shadow: var(--shadow);
-  max-width: 340px;
-  flex: 1 1 300px;
+  width: 100%;
+  max-width: 360px;
   border-top: 4px solid var(--gold);
 }
 
 .person-photo {
-  width: 170px;
-  height: 170px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  margin: 0 auto 1.2rem;
+  margin: 0 auto 1.1rem;
   background-size: cover;
   background-position: center;
   border: 4px solid var(--gold-soft);
@@ -255,7 +277,7 @@ img {
 
 .person h3 {
   font-family: var(--serif);
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: var(--maroon);
 }
 
@@ -279,7 +301,7 @@ img {
 }
 
 .heart {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   animation: pulse 1.6s ease-in-out infinite;
 }
 
@@ -289,10 +311,12 @@ img {
   }
 }
 
-/* ---------- Events ---------- */
+/* =====================================================================
+   Events
+   ===================================================================== */
 .timeline {
   display: grid;
-  gap: 1.2rem;
+  gap: 1rem;
   max-width: 640px;
   margin: 0 auto;
 }
@@ -300,18 +324,14 @@ img {
 .event-card {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1rem;
   background: #fff;
   border-radius: 14px;
-  padding: 1.2rem 1.4rem;
+  padding: 1.1rem 1.1rem;
   box-shadow: var(--shadow);
   text-align: left;
   border-left: 4px solid var(--gold-soft);
   transition: transform 0.25s ease;
-}
-
-.event-card:hover {
-  transform: translateX(6px);
 }
 
 .event-card.highlight {
@@ -320,25 +340,29 @@ img {
 }
 
 .event-icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   flex-shrink: 0;
 }
 
 .event-body h3 {
   font-family: var(--serif);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
 }
 
 .event-hindi {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--gold);
   font-family: var(--sans);
 }
 
 .event-date {
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .event-time {
@@ -348,18 +372,20 @@ img {
 }
 
 .baraat-note {
-  margin-top: 2rem;
+  margin-top: 1.75rem;
   font-family: var(--serif);
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--ink-soft);
 }
 
-/* ---------- Gallery ---------- */
+/* =====================================================================
+   Gallery — 2 columns on phones
+   ===================================================================== */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 0.8rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
 }
 
 .gallery-item {
@@ -376,11 +402,9 @@ img {
   transition: transform 0.5s ease;
 }
 
-.gallery-item:hover img {
-  transform: scale(1.08);
-}
-
-/* ---------- Invitation ---------- */
+/* =====================================================================
+   Invitation
+   ===================================================================== */
 .invite {
   background: var(--cream-deep);
   max-width: none;
@@ -388,53 +412,59 @@ img {
 
 .invite-text {
   font-family: var(--serif);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   max-width: 640px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 1.75rem;
   color: var(--ink);
 }
 
 .invite-details p {
   margin: 0.4rem 0;
   color: var(--ink-soft);
+  font-size: 0.95rem;
 }
 
 .invite-phones {
   display: flex;
-  gap: 1.5rem;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
   margin-top: 1rem;
-  flex-wrap: wrap;
 }
 
 .invite-phones a {
   color: var(--maroon);
   text-decoration: none;
   font-weight: 500;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
-/* ---------- Footer ---------- */
+/* =====================================================================
+   Footer
+   ===================================================================== */
 .footer {
   background: var(--ink);
   color: var(--cream);
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: 2.5rem 1.25rem;
 }
 
 .footer-names {
   font-family: var(--script);
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   color: var(--gold-soft);
 }
 
 .footer-date {
-  letter-spacing: 0.3em;
-  font-size: 0.9rem;
+  letter-spacing: 0.28em;
+  font-size: 0.85rem;
   margin: 0.5rem 0;
 }
 
 .footer-made {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   opacity: 0.7;
   margin-top: 1rem;
 }
@@ -446,11 +476,175 @@ img {
   }
 }
 
-@media (max-width: 560px) {
-  .heart {
-    transform: rotate(90deg);
+/* =====================================================================
+   BREAKPOINT: 480px+  (large phones)
+   ===================================================================== */
+@media (min-width: 480px) {
+  .hero-names {
+    font-size: 4.5rem;
+  }
+  .hero-names .amp {
+    font-size: 2.4rem;
+  }
+  .hero-date {
+    font-size: 1.6rem;
+  }
+  .countdown {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 520px;
+    gap: 0.9rem;
+  }
+  .count-value {
+    font-size: 2.6rem;
+  }
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+/* =====================================================================
+   BREAKPOINT: 768px+  (tablets)
+   ===================================================================== */
+@media (min-width: 768px) {
+  .section {
+    padding: 4.5rem 2rem;
+  }
+  .section-title {
+    font-size: 3rem;
+  }
+  .section-sub {
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-content {
+    padding: 2rem;
+  }
+  .hero-kicker {
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+  }
+  .hero-names {
+    font-size: 6.5rem;
+  }
+  .hero-names .amp {
+    font-size: 3.2rem;
+  }
+  .hero-sub {
+    font-size: 1.25rem;
+  }
+  .hero-date {
+    font-size: 2rem;
+    letter-spacing: 0.35em;
+  }
+  .hero-place {
+    font-size: 0.8rem;
+  }
+
+  .count-box {
+    padding: 1.6rem 1.5rem;
+    border-radius: 18px;
+  }
+  .count-value {
+    font-size: 3.2rem;
+  }
+  .count-label {
+    font-size: 0.7rem;
+  }
+
+  /* Couple side by side with a heart between */
+  .couple-cards {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .person {
+    flex: 1 1 300px;
+    max-width: 340px;
+  }
+  .person-photo {
+    width: 170px;
+    height: 170px;
+  }
+  .person h3 {
+    font-size: 1.6rem;
+  }
+
+  .event-card {
+    padding: 1.2rem 1.4rem;
+    gap: 1.2rem;
+  }
+  .event-icon {
+    font-size: 2rem;
+  }
+  .event-body h3 {
+    font-size: 1.3rem;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+  }
+
+  .invite-text {
+    font-size: 1.3rem;
+  }
+  .invite-phones {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .footer-names {
+    font-size: 2.8rem;
+  }
+}
+
+/* =====================================================================
+   BREAKPOINT: 1024px+  (desktops)
+   ===================================================================== */
+@media (min-width: 1024px) {
+  .hero-names {
+    font-size: 8rem;
+  }
+  .hero-names .amp {
+    font-size: 3.8rem;
+  }
+  .section-title {
+    font-size: 3.6rem;
+  }
+  .count-value {
+    font-size: 3.6rem;
+  }
+}
+
+/* =====================================================================
+   Hover effects only where a real pointer exists (not on touch)
+   ===================================================================== */
+@media (hover: hover) {
+  .hero-cta:hover {
+    background: var(--gold-soft);
+    color: var(--ink);
   }
   .event-card:hover {
-    transform: none;
+    transform: translateX(6px);
+  }
+  .gallery-item:hover img {
+    transform: scale(1.08);
+  }
+  .invite-phones a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* =====================================================================
+   Respect reduced-motion preferences
+   ===================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
