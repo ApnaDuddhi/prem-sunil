@@ -3,7 +3,6 @@ import {
   couple,
   weddingDate,
   events,
-  invitedBy,
   gallery,
   baraat,
 } from './weddingData.js'
@@ -93,11 +92,6 @@ function Story() {
         <article className="person">
           <div className="person-photo" style={{ backgroundImage: `url(${photo('sunil-1')})` }} />
           <h3>{couple.groom.name}</h3>
-          <p className="person-role">{couple.groom.role}</p>
-          <p className="person-family">
-            Son of {couple.groom.father} &amp; {couple.groom.mother}
-          </p>
-          <p className="person-village">{couple.groom.village}</p>
         </article>
 
         <div className="heart">💞</div>
@@ -105,11 +99,6 @@ function Story() {
         <article className="person">
           <div className="person-photo" style={{ backgroundImage: `url(${photo('prema-1')})` }} />
           <h3>{couple.bride.name}</h3>
-          <p className="person-role">The Bride</p>
-          <p className="person-family">
-            Daughter of {couple.bride.father} &amp; {couple.bride.mother}
-          </p>
-          <p className="person-village">{couple.bride.village}</p>
         </article>
       </div>
     </section>
@@ -165,21 +154,6 @@ function Invitation() {
         Your presence will make our celebration complete. We warmly invite you
         and your family to share in our joy.
       </p>
-      <div className="invite-details">
-        <p>
-          <strong>Presented by:</strong> {invitedBy.presenter}
-        </p>
-        <p>
-          <strong>With regards:</strong> {invitedBy.humble}
-        </p>
-        <p className="invite-phones">
-          {invitedBy.phones.map((p, i) => (
-            <a href={`tel:${p.replace(/\s/g, '')}`} key={i}>
-              📞 {p}
-            </a>
-          ))}
-        </p>
-      </div>
     </section>
   )
 }
