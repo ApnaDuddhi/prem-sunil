@@ -88,9 +88,11 @@ function Story() {
   return (
     <section className="section story" id="couple">
       <h2 className="section-title">The Happy Couple</h2>
+      <p className="section-sub">Two hearts, one journey</p>
       <div className="couple-cards">
         <article className="person">
           <div className="person-photo" style={{ backgroundImage: `url(${photo('sunil-1')})` }} />
+          <span className="person-role">The Groom</span>
           <h3>{couple.groom.name}</h3>
         </article>
 
@@ -98,6 +100,7 @@ function Story() {
 
         <article className="person">
           <div className="person-photo" style={{ backgroundImage: `url(${photo('prema-1')})` }} />
+          <span className="person-role">The Bride</span>
           <h3>{couple.bride.name}</h3>
         </article>
       </div>

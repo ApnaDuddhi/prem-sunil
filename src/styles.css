@@ -253,57 +253,63 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.1rem;
 }
 
 .person {
+  position: relative;
   background: #fff;
-  border-radius: 20px;
-  padding: 1.6rem 1.25rem 1.8rem;
+  border-radius: 24px;
+  padding: 1.75rem 1.25rem 1.6rem;
   box-shadow: var(--shadow);
   width: 100%;
-  max-width: 360px;
-  border-top: 4px solid var(--gold);
+  max-width: 320px;
+  border: 1px solid rgba(201, 162, 75, 0.25);
+  overflow: hidden;
+}
+
+/* subtle gold accent bar at the top of each card */
+.person::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-soft), var(--gold), var(--gold-soft));
 }
 
 .person-photo {
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
-  margin: 0 auto 1.1rem;
+  margin: 0 auto 1rem;
   background-size: cover;
   background-position: center;
-  border: 4px solid var(--gold-soft);
+  border: 3px solid var(--gold-soft);
   box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+}
+
+.person-role {
+  display: block;
+  color: var(--gold);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
 }
 
 .person h3 {
   font-family: var(--serif);
-  font-size: 1.5rem;
+  font-size: 1.45rem;
+  font-weight: 600;
   color: var(--maroon);
-}
-
-.person-role {
-  color: var(--gold);
-  font-style: italic;
-  font-family: var(--serif);
-  margin-bottom: 0.8rem;
-}
-
-.person-family {
-  font-size: 0.95rem;
-  color: var(--ink-soft);
-}
-
-.person-village {
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-  margin-top: 0.5rem;
-  opacity: 0.85;
+  line-height: 1.25;
 }
 
 .heart {
-  font-size: 2.2rem;
+  font-size: 2rem;
   animation: pulse 1.6s ease-in-out infinite;
 }
 
@@ -565,18 +571,19 @@ img {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.75rem;
   }
   .person {
-    flex: 1 1 300px;
-    max-width: 340px;
+    flex: 1 1 280px;
+    max-width: 320px;
+    padding: 2rem 1.5rem 1.8rem;
   }
   .person-photo {
-    width: 170px;
-    height: 170px;
+    width: 150px;
+    height: 150px;
   }
   .person h3 {
-    font-size: 1.6rem;
+    font-size: 1.55rem;
   }
 
   .event-card {
