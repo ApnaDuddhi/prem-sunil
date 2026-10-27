@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   couple,
   weddingDate,
@@ -9,6 +9,65 @@ import {
 
 const BASE = import.meta.env.BASE_URL
 const photo = (name) => `${BASE}photos/${name}.jpeg`
+
+// Preload every gallery image (plus the hero + couple portraits) up front
+// and report progress so a full-page loader can cover the site until the
+// images are ready — then the page reveals with everything cached.
+function usePreloadImages() {
+  const names = [
+    'couple-2',
+    'sunil-1',
+    'prema-1',
+    ...gallery.map((g) => g.src),
+  ]
+  const unique = [...new Set(names)]
+  const total = unique.length
+
+  const [loaded, setLoaded] = useState(0)
+
+  useEffect(() => {
+    let done = 0
+    const bump = () => {
+      done += 1
+      setLoaded(done)
+    }
+    const imgs = unique.map((name) => {
+      const img = new Image()
+      // count both success and failure so a missing file never hangs the loader
+      img.onload = bump
+      img.onerror = bump
+      img.src = photo(name)
+      // guard against an already-cached hit that won't fire onload
+      if (img.complete && img.naturalWidth > 0) bump()
+      return img
+    })
+    return () => imgs.forEach((img) => (img.onload = img.onerror = null))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const progress = total === 0 ? 1 : Math.min(loaded, total) / total
+  return { progress, done: loaded >= total }
+}
+
+function Preloader({ progress }) {
+  const percent = Math.round(progress * 100)
+  return (
+    <div className="preloader" role="status" aria-live="polite" aria-label="Loading">
+      <div className="preloader-inner">
+        <span className="preloader-rings" aria-hidden="true" />
+        <p className="preloader-names">
+          {couple.groom.shortName} <span className="amp">&amp;</span>{' '}
+          {couple.bride.shortName}
+        </p>
+        <p className="preloader-sub">Loading our special day…</p>
+        <div className="preloader-bar" aria-hidden="true">
+          <span className="preloader-fill" style={{ width: `${percent}%` }} />
+        </div>
+        <p className="preloader-percent">{percent}%</p>
+      </div>
+    </div>
+  )
+}
 
 function getTimeLeft(target) {
   const total = target.getTime() - Date.now()
@@ -134,17 +193,129 @@ function Events() {
   )
 }
 
+function Lightbox({ index, onClose, onNavigate }) {
+  const touchStart = useRef(null)
+  const item = gallery[index]
+
+  const goPrev = useCallback(
+    () => onNavigate((index - 1 + gallery.length) % gallery.length),
+    [index, onNavigate]
+  )
+  const goNext = useCallback(
+    () => onNavigate((index + 1) % gallery.length),
+    [index, onNavigate]
+  )
+
+  // Keyboard: Esc to close, arrows to navigate. Lock body scroll while open.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+      else if (e.key === 'ArrowLeft') goPrev()
+      else if (e.key === 'ArrowRight') goNext()
+    }
+    window.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [onClose, goPrev, goNext])
+
+  const onTouchStart = (e) => {
+    touchStart.current = e.touches[0].clientX
+  }
+  const onTouchEnd = (e) => {
+    if (touchStart.current == null) return
+    const delta = e.changedTouches[0].clientX - touchStart.current
+    if (delta > 50) goPrev()
+    else if (delta < -50) goNext()
+    touchStart.current = null
+  }
+
+  return (
+    <div
+      className="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Photo gallery"
+      onClick={onClose}
+    >
+      <button className="lightbox-close" aria-label="Close" onClick={onClose}>
+        ✕
+      </button>
+      <button
+        className="lightbox-nav lightbox-prev"
+        aria-label="Previous photo"
+        onClick={(e) => {
+          e.stopPropagation()
+          goPrev()
+        }}
+      >
+        ‹
+      </button>
+      <figure
+        className="lightbox-stage"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <img src={photo(item.src)} alt={item.alt} className="lightbox-img" />
+        <figcaption className="lightbox-counter">
+          {index + 1} / {gallery.length}
+        </figcaption>
+      </figure>
+      <button
+        className="lightbox-nav lightbox-next"
+        aria-label="Next photo"
+        onClick={(e) => {
+          e.stopPropagation()
+          goNext()
+        }}
+      >
+        ›
+      </button>
+    </div>
+  )
+}
+
 function Gallery() {
+  const [openIndex, setOpenIndex] = useState(null)
+  // Show a few previews on the page; the rest live in the lightbox.
+  const previewCount = 6
+  const previews = gallery.slice(0, previewCount)
+  const remaining = gallery.length - previewCount
+
   return (
     <section className="section gallery" id="gallery">
       <h2 className="section-title">Moments</h2>
+      <p className="section-sub">Tap a photo to open the gallery</p>
       <div className="gallery-grid">
-        {gallery.map((g, i) => (
-          <div className="gallery-item" key={i}>
+        {previews.map((g, i) => (
+          <button
+            type="button"
+            className="gallery-item"
+            key={i}
+            onClick={() => setOpenIndex(i)}
+            aria-label={`Open photo: ${g.alt}`}
+          >
             <img src={photo(g.src)} alt={g.alt} loading="lazy" />
-          </div>
+            {i === previewCount - 1 && remaining > 0 && (
+              <span className="gallery-more" aria-hidden="true">
+                +{remaining}
+              </span>
+            )}
+          </button>
         ))}
       </div>
+
+      {openIndex !== null && (
+        <Lightbox
+          index={openIndex}
+          onClose={() => setOpenIndex(null)}
+          onNavigate={setOpenIndex}
+        />
+      )}
     </section>
   )
 }
@@ -174,8 +345,34 @@ function Footer() {
 }
 
 export default function App() {
+  const { progress, done } = usePreloadImages()
+
+  // Keep the loader up at least a moment so it reads as intentional rather
+  // than a flash, then fade it out once images are ready.
+  const [minTimePassed, setMinTimePassed] = useState(false)
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    const t = setTimeout(() => setMinTimePassed(true), 900)
+    return () => clearTimeout(t)
+  }, [])
+
+  const ready = done && minTimePassed
+
+  useEffect(() => {
+    if (!ready) return
+    // let the fade-out animation play before removing from the DOM
+    const t = setTimeout(() => setHidden(true), 600)
+    return () => clearTimeout(t)
+  }, [ready])
+
   return (
     <div className="app">
+      {!hidden && (
+        <div className={`preloader-wrap ${ready ? 'is-done' : ''}`}>
+          <Preloader progress={progress} />
+        </div>
+      )}
       <Hero />
       <CountdownSection />
       <Story />
