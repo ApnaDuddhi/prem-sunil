@@ -388,9 +388,9 @@ img {
 }
 
 .person-photo {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
+  width: 250px;
+  height: 250px;
+  border-radius: 10%;
   margin: 0 auto 1rem;
   background-size: cover;
   background-position: center;
@@ -403,17 +403,17 @@ img {
   color: var(--gold);
   font-family: var(--serif);
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 1.25rem;
   letter-spacing: 0.04em;
   margin-bottom: 0.15rem;
 }
 
 .person h3 {
   font-family: var(--serif);
-  font-size: 1.45rem;
+  font-size: 2rem;
   font-weight: 600;
   color: var(--maroon);
-  line-height: 1.25;
+  line-height: 2.25;
 }
 
 .heart {
