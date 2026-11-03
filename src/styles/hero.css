@@ -1,0 +1,133 @@
+/* =====================================================================
+   Hero section
+   ===================================================================== */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  transform: scale(1.15);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(40, 24, 18, 0.55),
+    rgba(60, 30, 25, 0.35) 40%,
+    rgba(40, 24, 18, 0.75)
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem 1.25rem;
+  width: 100%;
+}
+
+.hero-kicker {
+  font-family: var(--serif);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  opacity: 0.9;
+}
+
+.hero-names {
+  font-family: var(--script);
+  font-weight: 400;
+  font-size: 3.4rem;
+  line-height: 1.05;
+  margin: 0.4rem 0;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-names .amp {
+  font-size: 1.9rem;
+  color: var(--gold-soft);
+  margin: -0.2rem 0;
+}
+
+.hero-sub {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.95;
+}
+
+.hero-date {
+  font-family: var(--serif);
+  letter-spacing: 0.3em;
+  font-size: 1.35rem;
+  margin-top: 1rem;
+  color: var(--gold-soft);
+}
+
+.hero-place {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  opacity: 0.85;
+  margin-top: 0.3rem;
+}
+
+.hero-cta {
+  display: inline-block;
+  margin-top: 1.75rem;
+  padding: 0.85rem 1.8rem;
+  border: 1px solid var(--gold-soft);
+  border-radius: 40px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  min-height: 44px;
+  transition: background 0.3s ease, color 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+@media (hover: hover) {
+  .hero-cta:hover {
+    background: var(--gold-soft);
+    color: var(--ink);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-photo       { background-position: center 22%; }
+  .hero-content     { padding: 2rem; }
+  .hero-kicker      { font-size: 0.85rem; letter-spacing: 0.3em; }
+  .hero-names       { font-size: 6.5rem; }
+  .hero-names .amp  { font-size: 3.2rem; }
+  .hero-sub         { font-size: 1.25rem; }
+  .hero-date        { font-size: 2rem; letter-spacing: 0.35em; }
+  .hero-place       { font-size: 0.8rem; }
+}
+
+@media (min-width: 1024px) {
+  .hero-names       { font-size: 8rem; }
+  .hero-names .amp  { font-size: 3.8rem; }
+}
+
+@media (min-width: 480px) {
+  .hero-names       { font-size: 4.5rem; }
+  .hero-names .amp  { font-size: 2.4rem; }
+  .hero-date        { font-size: 1.6rem; }
+}

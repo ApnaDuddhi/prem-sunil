@@ -1,0 +1,48 @@
+/* =====================================================================
+   Invitation section
+   ===================================================================== */
+
+.invite {
+  background: var(--cream-deep);
+  max-width: none;
+}
+
+.invite-text {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  max-width: 640px;
+  margin: 0 auto 1.75rem;
+  color: var(--ink);
+}
+
+.invite-details p {
+  margin: 0.4rem 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.invite-phones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.invite-phones a {
+  color: var(--maroon);
+  text-decoration: none;
+  font-weight: 500;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (hover: hover) {
+  .invite-phones a:hover { text-decoration: underline; }
+}
+
+@media (min-width: 768px) {
+  .invite-text    { font-size: 1.3rem; }
+  .invite-phones  { flex-direction: row; gap: 1.5rem; }
+}

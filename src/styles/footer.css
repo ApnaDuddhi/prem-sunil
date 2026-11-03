@@ -1,0 +1,32 @@
+/* =====================================================================
+   Footer
+   ===================================================================== */
+
+.footer {
+  background: var(--ink);
+  color: var(--cream);
+  text-align: center;
+  padding: 2.5rem 1.25rem;
+}
+
+.footer-names {
+  font-family: var(--script);
+  font-size: 2.5rem;
+  color: var(--gold-soft);
+}
+
+.footer-date {
+  letter-spacing: 0.28em;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.footer-made {
+  font-size: 0.78rem;
+  opacity: 0.7;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .footer-names { font-size: 2.8rem; }
+}

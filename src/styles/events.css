@@ -1,0 +1,78 @@
+/* =====================================================================
+   Events / Timeline section
+   ===================================================================== */
+
+.timeline {
+  display: grid;
+  gap: 1rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.event-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.1rem;
+  box-shadow: var(--shadow);
+  text-align: left;
+  border-left: 4px solid var(--gold-soft);
+  transition: transform 0.25s ease;
+}
+
+.event-card.highlight {
+  border-left-color: var(--maroon);
+  background: linear-gradient(120deg, #fff, var(--cream-deep));
+}
+
+.event-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.event-body h3 {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.event-hindi {
+  font-size: 0.9rem;
+  color: var(--gold);
+  font-family: var(--sans);
+}
+
+.event-date {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.event-time {
+  color: var(--maroon);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.baraat-note {
+  margin-top: 1.75rem;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+}
+
+@media (hover: hover) {
+  .event-card:hover { transform: translateX(6px); }
+}
+
+@media (min-width: 768px) {
+  .event-card       { padding: 1.2rem 1.4rem; gap: 1.2rem; }
+  .event-icon       { font-size: 2rem; }
+  .event-body h3    { font-size: 1.3rem; }
+}

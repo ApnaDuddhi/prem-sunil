@@ -1,0 +1,75 @@
+/* =====================================================================
+   Story / Couple section
+   ===================================================================== */
+
+.couple-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.person {
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  padding: 1.75rem 1.25rem 1.6rem;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 320px;
+  border: 1px solid rgba(201, 162, 75, 0.25);
+  overflow: hidden;
+}
+
+.person::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-soft), var(--gold), var(--gold-soft));
+}
+
+.person-photo {
+  width: 250px;
+  height: 250px;
+  border-radius: 10%;
+  margin: 0 auto 1rem;
+  background-size: cover;
+  background-position: center;
+  border: 3px solid var(--gold-soft);
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.4);
+}
+
+.person-role {
+  display: block;
+  color: var(--gold);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
+}
+
+.person h3 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--maroon);
+  line-height: 2.25;
+}
+
+.heart {
+  font-size: 2rem;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.2); }
+}
+
+@media (min-width: 768px) {
+  .couple-cards     { flex-direction: row; align-items: center; justify-content: center; gap: 1.75rem; }
+  .person           { flex: 1 1 280px; max-width: 320px; padding: 2rem 1.5rem 1.8rem; }
+  .person-photo     { width: 150px; height: 150px; }
+  .person h3        { font-size: 1.55rem; }
+}

@@ -1,0 +1,73 @@
+/* =====================================================================
+   Base — reset, CSS variables, global body styles
+   ===================================================================== */
+
+:root {
+  --gold: #c9a24b;
+  --gold-soft: #e4cd8f;
+  --rose: #b76e79;
+  --cream: #fdf8f1;
+  --cream-deep: #f6ecdd;
+  --ink: #3a2e26;
+  --ink-soft: #6b5c50;
+  --maroon: #7a2e3a;
+  --shadow: 0 14px 40px -20px rgba(80, 50, 30, 0.45);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --script: 'Great Vibes', cursive;
+  --sans: 'Poppins', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.app {
+  width: 100%;
+}
+
+/* ---- Shared section layout ----------------------------------------- */
+.section {
+  padding: 3.25rem 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-title {
+  font-family: var(--script);
+  font-size: 2.3rem;
+  color: var(--maroon);
+  font-weight: 400;
+  margin-bottom: 0.3rem;
+  line-height: 1.1;
+}
+
+.section-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  margin-bottom: 2rem;
+}
