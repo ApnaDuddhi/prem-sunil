@@ -110,8 +110,8 @@
 
 /* ---- Event cards — stripe + slide ---------------------------------- */
 @keyframes stripe-sweep {
-  from { clip-path: inset(0 100% 0 0); }
-  to   { clip-path: inset(0 0% 0 0); }
+  from { transform: translateX(-101%); }
+  to   { transform: translateX(101%); }
 }
 
 @keyframes card-rise-down {
@@ -280,7 +280,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(90deg, var(--gold-soft), var(--gold));
-  clip-path: inset(0 100% 0 0);
+  transform: translateX(-101%);
   z-index: 1;
   pointer-events: none;
 }
@@ -304,7 +304,6 @@
 
 .reveal.reveal-blind {
   opacity: 1;
-  clip-path: inset(0 0 100% 0);
 }
 
 .reveal.reveal-blind.is-visible--down {

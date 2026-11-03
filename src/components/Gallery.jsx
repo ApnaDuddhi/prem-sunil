@@ -122,13 +122,10 @@ function Lightbox({ index, onClose, onNavigate }) {
 // Gallery item
 // ---------------------------------------------------------------------------
 function GalleryItem({ g, i, previewCount, remaining, onClick }) {
-  const ref = useReveal(0.1)
   return (
     <button
       type="button"
-      className="gallery-item reveal reveal-blind"
-      ref={ref}
-      style={{ '--delay': `${i * 0.08}s` }}
+      className="gallery-item"
       onClick={() => onClick(i)}
       aria-label={`Open photo: ${g.alt}`}
     >

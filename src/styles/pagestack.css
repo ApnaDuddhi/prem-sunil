@@ -138,15 +138,25 @@
   box-sizing: border-box;
 }
 
+/* Story content uses the card's internal scroll area when taller than the viewport */
+.page-card--story .section {
+  justify-content: flex-start;
+  min-height: max(100%, 100svh);
+}
+.page-card--story .page-card-scroll {
+  overflow-y: hidden;
+}
+.page-card--story.is-scroll-active .page-card-scroll {
+  overflow-y: auto;
+}
+
 /* Events timeline needs extra vertical room — let it scroll inside the card */
 .page-card--events .page-card-scroll {
   padding: 0;
 }
 .page-card--events .section {
-  justify-content: flex-start;
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
-  min-height: auto;
+  justify-content: center;
+  min-height: 100%;
 }
 
 /* ── Scroll indicator dot ─────────────────────────────────────────────── */

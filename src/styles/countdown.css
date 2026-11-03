@@ -1,65 +1,227 @@
 /* =====================================================================
-   Countdown section
+   Countdown section — full-screen card with split-reveal boxes
    ===================================================================== */
 
 .countdown-section {
-  /* background handled by .page-card--countdown */
   width: 100%;
+  position: relative;
+  overflow: hidden;         /* contain the decorative rings */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+/* ── Decorative rotating rings ───────────────────────────────────────── */
+.cd-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(201, 162, 75, 0.18);
+  pointer-events: none;
+  /* size & position set below */
+  width: 70vmax;
+  height: 70vmax;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: cd-rotate 22s linear infinite;
+}
+
+.cd-ring::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+}
+
+.cd-ring--2 {
+  width: 50vmax;
+  height: 50vmax;
+  border-color: rgba(183, 110, 121, 0.14);
+  animation-duration: 34s;
+  animation-direction: reverse;
+}
+
+.cd-ring--2::before {
+  background: var(--rose);
+  opacity: 0.4;
+}
+
+@keyframes cd-rotate {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ── Scale group — JS drives transform via useSectionScale ───────────── */
+.cd-scale-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  transform-origin: center center;
+  will-change: transform;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Countdown grid ──────────────────────────────────────────────────── */
 .countdown {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-  max-width: 320px;
+  gap: 1rem;
+  max-width: 340px;
   margin: 0 auto;
-}
-
-.count-box {
-  background: #fff;
-  border: 1px solid var(--gold-soft);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  padding: 1.1rem 0.75rem;
   position: relative;
+  z-index: 1;
 }
 
+/* ── Count box ───────────────────────────────────────────────────────── */
+.count-box {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--gold-soft);
+  border-radius: 20px;
+  box-shadow:
+    var(--shadow),
+    0 0 0 1px rgba(201, 162, 75, 0.08) inset;
+  padding: 1.4rem 0.75rem 1.1rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* ── Split-reveal hatch lines ────────────────────────────────────────── */
+/* Two invisible lines that animate open like a hatch on reveal */
+.count-box-top,
+.count-box-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: var(--cream-deep);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.count-box-top    { top: 0; transform-origin: top;    }
+.count-box-bottom { bottom: 0; transform-origin: bottom; }
+
+/* Before reveal: hatches cover the box */
+.count-box--split .count-box-top,
+.count-box--split .count-box-bottom {
+  transform: scaleY(1);
+  transition: none;
+}
+
+/* After reveal: hatches open */
+.count-box--split.is-visible--down .count-box-top,
+.count-box--split.is-visible--up   .count-box-top {
+  animation: hatch-top 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s) both;
+}
+
+.count-box--split.is-visible--down .count-box-bottom,
+.count-box--split.is-visible--up   .count-box-bottom {
+  animation: hatch-bottom 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s) both;
+}
+
+@keyframes hatch-top {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0); }
+}
+
+@keyframes hatch-bottom {
+  from { transform: scaleY(1); }
+  to   { transform: scaleY(0); }
+}
+
+/* ── Number value ────────────────────────────────────────────────────── */
 .count-value {
   display: block;
   font-family: var(--serif);
   font-weight: 600;
-  font-size: 2.4rem;
+  font-size: 2.8rem;
   color: var(--maroon);
   line-height: 1;
   font-variant-numeric: tabular-nums;
+  position: relative;
+  z-index: 1;
 }
 
+/* Flip animation on tick — applied via JS className toggle */
+.count-value.count-flip {
+  animation: count-flip 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes count-flip {
+  0%   { transform: translateY(-30%) scaleY(0.6); opacity: 0.4; }
+  60%  { transform: translateY(6%)   scaleY(1.05); opacity: 1; }
+  100% { transform: translateY(0)    scaleY(1); opacity: 1; }
+}
+
+/* Seconds pulse — subtle glow to draw eye to the ticking digit */
+.count-value--seconds {
+  color: var(--rose);
+}
+
+/* ── Label ───────────────────────────────────────────────────────────── */
 .count-label {
   display: block;
-  margin-top: 0.4rem;
+  margin-top: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  font-size: 0.62rem;
   color: var(--ink-soft);
+  position: relative;
+  z-index: 1;
 }
 
+/* ── Gold shimmer line at top of each box ────────────────────────────── */
+.count-box::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  border-radius: 20px 20px 0 0;
+}
+
+/* ── Celebration text ────────────────────────────────────────────────── */
 .countdown-done {
   font-family: var(--script);
   font-size: 2.2rem;
   color: var(--maroon);
+  position: relative;
+  z-index: 1;
 }
 
+/* ── Responsive ──────────────────────────────────────────────────────── */
 @media (min-width: 480px) {
-  .countdown      { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 520px; gap: 0.9rem; }
-  .count-value    { font-size: 2.6rem; }
+  .countdown    { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 560px; gap: 1rem; }
+  .count-value  { font-size: 3rem; }
 }
 
 @media (min-width: 768px) {
-  .count-box      { padding: 1.6rem 1.5rem; border-radius: 18px; }
-  .count-value    { font-size: 3.2rem; }
-  .count-label    { font-size: 0.7rem; }
+  .countdown    { max-width: 680px; gap: 1.25rem; }
+  .count-box    { padding: 2rem 1.5rem 1.5rem; border-radius: 22px; }
+  .count-value  { font-size: 3.8rem; }
+  .count-label  { font-size: 0.7rem; }
 }
 
 @media (min-width: 1024px) {
-  .count-value    { font-size: 3.6rem; }
+  .countdown    { max-width: 760px; }
+  .count-value  { font-size: 4.4rem; }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cd-ring                              { animation: none !important; }
+  .count-box-top, .count-box-bottom     { animation: none !important; transform: scaleY(0) !important; }
+  .count-value.count-flip               { animation: none !important; }
 }

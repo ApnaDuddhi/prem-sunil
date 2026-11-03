@@ -1,5 +1,7 @@
+import { useRef } from 'react'
 import { events, baraat } from '../weddingData.js'
 import { useReveal } from '../hooks/useReveal.js'
+import { useSectionScale } from '../hooks/useSectionScale.js'
 
 function EventCard({ event: e, index }) {
   const ref = useReveal(0.15)
@@ -25,20 +27,32 @@ export default function Events() {
   const titleRef  = useReveal(0.2)
   const subRef    = useReveal(0.2)
   const baraatRef = useReveal()
+  const groupRef  = useRef(null)
+  const { containerRef } = useSectionScale({
+    scaleRef: groupRef,
+    fadeEnd: 0,
+    speed: 0.002,
+    fillRatio: 0.96,
+    isFirst: false,
+    transformOrigin: 'center center',
+  })
+
   return (
-    <section className="section events" id="events">
-      <h2 className="section-title title-scale-reveal" ref={titleRef}>
-        Wedding Ceremonies
-      </h2>
-      <p className="section-sub reveal-fade-up" ref={subRef}>
-        सांस्कृतिक कार्यक्रम
-      </p>
-      <div className="timeline">
-        {events.map((e, i) => <EventCard key={e.key} event={e} index={i} />)}
+    <section className="section events" id="events" ref={containerRef}>
+      <div className="events-scale-group" ref={groupRef}>
+        <h2 className="section-title title-scale-reveal" ref={titleRef}>
+          Wedding Ceremonies
+        </h2>
+        <p className="section-sub reveal-fade-up" ref={subRef}>
+          सांस्कृतिक कार्यक्रम
+        </p>
+        <div className="timeline">
+          {events.map((e, i) => <EventCard key={e.key} event={e} index={i} />)}
+        </div>
+        <p className="baraat-note reveal-fade-up" ref={baraatRef}>
+          🐎 {baraat.note}
+        </p>
       </div>
-      <p className="baraat-note reveal-fade-up" ref={baraatRef}>
-        🐎 {baraat.note}
-      </p>
     </section>
   )
 }

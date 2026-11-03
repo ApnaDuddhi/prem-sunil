@@ -1,6 +1,13 @@
-/* =====================================================================
-   Story / Couple section
-   ===================================================================== */
+/* ── Story content ───────────────────────────────────────────────────── */
+.story-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+}
+
+
 
 .couple-cards {
   display: flex;
@@ -47,15 +54,13 @@
   font-style: italic;
   font-size: 1.25rem;
   letter-spacing: 0.04em;
-  margin-bottom: 0.15rem;
 }
 
-.person h3 {
+.couple-name {
   font-family: var(--serif);
   font-size: 2rem;
   font-weight: 600;
   color: var(--maroon);
-  line-height: 2.25;
 }
 
 .heart {
@@ -64,7 +69,7 @@
 }
 
 @keyframes pulse {
-  50% { transform: scale(1.2); }
+  50% { transform: scale(1.5); }
 }
 
 @media (min-width: 768px) {

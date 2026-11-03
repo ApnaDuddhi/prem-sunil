@@ -6,7 +6,18 @@
   display: grid;
   gap: 1rem;
   max-width: 640px;
+  width: 100%;
   margin: 0 auto;
+}
+
+.events-scale-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 640px;
+  transform-origin: center center;
+  will-change: transform;
 }
 
 .event-card {
