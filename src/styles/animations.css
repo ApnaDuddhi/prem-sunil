@@ -347,7 +347,7 @@
 
 .footer-shimmer.is-visible--down,
 .footer-shimmer.is-visible--up {
-  animation: shimmer 2.5s linear 0.3s both;
+  animation: shimmer 2.5s linear 0.3s infinite;
 }
 
 /* =====================================================================
