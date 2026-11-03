@@ -73,7 +73,7 @@ export default function App() {
   // Drive the card-stack transforms
   useCardStack('.page-card-inner')
 
-  // Snap the page stack to the next card after crossing 20% of its height.
+  // Snap to the nearest page(s) crossed by the user's scroll gesture.
   useEffect(() => {
     let lastY = window.scrollY
     let gestureStartY = null
@@ -109,7 +109,10 @@ export default function App() {
         const crossedThreshold = direction === 'down'
           ? distance >= vh * 0.2
           : distance <= -vh * 0.2
-        const step = crossedThreshold ? (direction === 'down' ? 1 : -1) : 0
+        const pagesMoved = crossedThreshold
+          ? Math.max(1, Math.round(Math.abs(distance) / vh))
+          : 0
+        const step = pagesMoved * (direction === 'down' ? 1 : -1)
         const targetSection = Math.max(
           0,
           Math.min(totalCards - 1, gestureStartSection + step)
