@@ -1,0 +1,202 @@
+/* =====================================================================
+   Page-stack card layout
+   Each section lives in a .page-card that is sticky at top:0.
+   The .page-stack wrapper is tall enough to give each card its own
+   scroll window (set via inline style in App.jsx).
+   ===================================================================== */
+
+/* ── Stack wrapper ───────────────────────────────────────────────────── */
+.page-stack {
+  position: relative;
+  /* height is set inline: calc(N * 100vh) */
+}
+
+/* ── Individual card slot ────────────────────────────────────────────── */
+.page-card {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  /* each card sits above the previous via z-index */
+  z-index: var(--card-z, 1);
+  /* clip so scaled card doesn't bleed over the next */
+  overflow: hidden;
+}
+
+/* ── Visible card surface ────────────────────────────────────────────── */
+.page-card-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px 24px 0 0;
+  overflow: hidden;
+  will-change: transform, opacity;
+  transform-origin: center bottom;
+  /* Incoming card lifts from slightly below */
+  animation: card-lift-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  box-shadow:
+    0 -8px 40px -4px rgba(40, 24, 18, 0.18),
+    0 2px 0 0 rgba(201, 162, 75, 0.18);
+}
+
+@keyframes card-lift-in {
+  from {
+    transform: translateY(6%) scale(0.97);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Content inside each card scrolls vertically ────────────────────── */
+.page-card-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* hide scrollbar but keep scrollability */
+  scrollbar-width: none;
+}
+.page-card-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Per-card background themes ─────────────────────────────────────── */
+.page-card--countdown .page-card-inner {
+  background: radial-gradient(ellipse at 50% 0%, var(--cream-deep) 0%, var(--cream) 100%);
+}
+
+.page-card--story .page-card-inner {
+  background: var(--cream);
+}
+
+.page-card--events .page-card-inner {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+/* Events on dark background — override text colours */
+.page-card--events .section-title,
+.page-card--events .countdown-done {
+  color: var(--gold-soft);
+}
+.page-card--events .section-sub {
+  color: rgba(253, 248, 241, 0.7);
+}
+.page-card--events .event-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--gold);
+}
+.page-card--events .event-card.highlight {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: var(--gold-soft);
+}
+.page-card--events .event-body h3 {
+  color: var(--cream);
+}
+.page-card--events .event-date {
+  color: rgba(253, 248, 241, 0.6);
+}
+.page-card--events .event-time {
+  color: var(--gold-soft);
+}
+.page-card--events .baraat-note {
+  color: rgba(253, 248, 241, 0.6);
+}
+
+.page-card--gallery .page-card-inner {
+  background: #1a1008;
+}
+.page-card--gallery .section-title {
+  color: var(--gold-soft);
+}
+.page-card--gallery .section-sub {
+  color: rgba(253, 248, 241, 0.6);
+}
+
+.page-card--invitation .page-card-inner {
+  background: var(--cream-deep);
+}
+
+.page-card--footer .page-card-inner {
+  background: var(--ink);
+  border-radius: 24px 24px 0 0;
+}
+
+/* ── Section layout inside cards ─────────────────────────────────────── */
+/* Remove the old max-width centering from .section when inside a card —
+   the card itself handles the container */
+.page-card .section {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.25rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Events timeline needs extra vertical room — let it scroll inside the card */
+.page-card--events .page-card-scroll {
+  padding: 0;
+}
+.page-card--events .section {
+  justify-content: flex-start;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  min-height: auto;
+}
+
+/* ── Scroll indicator dot ─────────────────────────────────────────────── */
+.page-card-dot-nav {
+  position: fixed;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.page-card-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(201, 162, 75, 0.35);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.page-card-dot.is-active {
+  background: var(--gold);
+  transform: scale(1.4);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .page-card-inner {
+    border-radius: 28px 28px 0 0;
+  }
+  .page-card .section {
+    padding: 4rem 2rem;
+  }
+}
+
+/* ── Reduced motion — flat, no card animation ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .page-card-inner {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .page-stack {
+    height: auto !important;
+  }
+  .page-card {
+    position: relative;
+    height: auto;
+  }
+}

@@ -3,8 +3,8 @@
    ===================================================================== */
 
 .invite {
-  background: var(--cream-deep);
-  max-width: none;
+  /* background handled by .page-card--invitation */
+  width: 100%;
 }
 
 .invite-text {

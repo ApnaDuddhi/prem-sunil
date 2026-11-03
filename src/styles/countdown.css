@@ -3,8 +3,8 @@
    ===================================================================== */
 
 .countdown-section {
-  background: radial-gradient(circle at top, var(--cream-deep), var(--cream));
-  max-width: none;
+  /* background handled by .page-card--countdown */
+  width: 100%;
 }
 
 .countdown {
